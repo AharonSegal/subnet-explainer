@@ -133,3 +133,87 @@ Step 5: Next Subnet
 | C     | 110xxxxx          | 192.0.0.0 – 223.255.255.255 | 255.255.255.0   | Small networks           |
 | D     | 1110xxxx          | 224.0.0.0 – 239.255.255.255 | N/A             | Multicast                |
 | E     | 1111xxxx          | 240.0.0.0 – 255.255.255.255 | N/A             | Reserved / Experimental  |
+
+
+
+
+
+# Multicast Transmission (IPv4)
+
+- **Purpose:** Reduce network traffic by sending a single packet to multiple subscribed hosts.
+- **Multicast IP Range:** 224.0.0.0 – 239.255.255.255
+- **Subscribed Hosts:** Called multicast clients; only they process packets sent to the multicast address.
+- **Subscription Protocol:** IGMP (Internet Group Management Protocol)
+  - Hosts send **join/leave messages** to routers/switches.
+- **Network Filtering:**
+  - **Switches:** Use IGMP snooping to forward multicast packets **only to subscribed ports**.
+  - **Routers:** Use multicast routing protocols (e.g., PIM) to forward packets only where needed.
+- **Example:**  
+  - 5 hosts in a subnet; only 3 subscribe to 239.1.1.1 → only those 3 receive the packets.
+- **Protocol-Specific Multicast:**  
+  - Some protocols (e.g., OSPF) use reserved multicast addresses (224.0.0.x). Only devices using that protocol process the packets.
+
+
+  # IPv4 Address Types
+
+IPv4 addresses can be categorized based on purpose, range, and usage.
+
+---
+
+## 1. Public (Global) IP Address
+- **Definition:** Routable on the Internet.
+- **Range:** Any IP not reserved for private, loopback, or special purposes.
+- **Use:** Devices communicating over the Internet.
+- **Example:** `8.8.8.8` (Google DNS)
+- **Class Identification:**  
+  - 1–126 → Class A  
+  - 128–191 → Class B  
+  - 192–223 → Class C
+
+---
+
+## 2. Private IP Address
+- **Definition:** Reserved for internal networks; not routable on the Internet.
+- **Ranges (RFC 1918):**
+  - Class A: 10.0.0.0 – 10.255.255.255  
+  - Class B: 172.16.0.0 – 172.31.255.255  
+  - Class C: 192.168.0.0 – 192.168.255.255
+- **Use:** Home, office LANs, internal devices.
+- **Example:** `192.168.1.10`
+
+---
+
+## 3. Loopback Address
+- **Definition:** Used by a device to communicate with itself.
+- **Range:** 127.0.0.0 – 127.255.255.255 (commonly `127.0.0.1`)
+- **Use:** Testing network software, internal communication.
+- **Example:** `ping 127.0.0.1`
+
+---
+
+## 4. Link-Local Address
+- **Definition:** Automatically assigned when no IP is available via DHCP.
+- **Range:** 169.254.0.0 – 169.254.255.255
+- **Use:** Local subnet communication; non-routable.
+- **Example:** Laptop assigns `169.254.12.34` if DHCP fails.
+
+---
+
+## 5. Other Special Addresses
+- **Experimental / Reserved:** 240.0.0.0 – 255.255.255.254  
+  - Reserved for future use; not used in normal networks.
+- **Broadcast Address:** 255.255.255.255  
+  - Sends a packet to all devices in the subnet.
+
+---
+
+## Quick Reference Table
+
+| Type          | Range                         | Use                       |
+|---------------|-------------------------------|---------------------------|
+| Public IP     | Non-reserved IPs              | Internet communication    |
+| Private IP    | 10.0.0.0/8, 172.16–31/12, 192.168/16 | LAN/internal networks     |
+| Loopback      | 127.0.0.0 – 127.255.255.255  | Self-testing, internal    |
+| Link-local    | 169.254.0.0 – 169.254.255.255| Local subnet, no DHCP     |
+| Experimental  | 240.0.0.0 – 255.255.255.254  | Reserved/future use       |
+| Broadcast     | 255.255.255.255               | All devices on subnet     |
