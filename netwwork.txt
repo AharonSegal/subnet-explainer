@@ -125,3 +125,11 @@ Step 5: Next Subnet
 
 """"
 
+
+| Class | First Bit Pattern | Range                       | Default Mask    | Purpose                  |
+|-------|-------------------|-----------------------------|-----------------|--------------------------|
+| A     | 0xxxxxxx          | 0.0.0.0   – 127.255.255.255 | 255.0.0.0       | Very large networks      |
+| B     | 10xxxxxx          | 128.0.0.0 – 191.255.255.255 | 255.255.0.0     | Medium networks          |
+| C     | 110xxxxx          | 192.0.0.0 – 223.255.255.255 | 255.255.255.0   | Small networks           |
+| D     | 1110xxxx          | 224.0.0.0 – 239.255.255.255 | N/A             | Multicast                |
+| E     | 1111xxxx          | 240.0.0.0 – 255.255.255.255 | N/A             | Reserved / Experimental  |
