@@ -1,0 +1,135 @@
+| OSI Layer | Name                     | Addresses / Identifiers Used                                       |
+|-----------|--------------------------|---------------------------------------------------------------------|
+| 7         | Application              | Domain names, URLs, hostnames, email addresses                      |
+| 6         | Presentation             | None specific (handles encoding, compression, encryption)           |
+| 5         | Session                  | None specific (manages sessions and connections)                    |
+| 4         | Transport                | Port numbers (TCP/UDP), sequence numbers                            |
+| 3         | Network                  | IP addresses, subnet mask/prefix, default gateway, ICMP IDs, ARP    |
+| 2         | Data Link                | MAC addresses, VLAN IDs, LLC SAP identifiers                        |
+| 1         | Physical                 | No addressing (signals: bits, voltage, light, RF)                   |
+
+---
+## Subnet Calculation for 59.89.212.216/14
+
+- **Step 1: Transition byte and initial calculation** 
+    the transition byte is /14
+    meaning the base ir 32 bits
+    00000000/00000000/00000000/00000000
+    14 means there are 14 ones in the end of the sequence
+    so now we replace the zeros with ones starting from the left 
+    this results in 
+    11111111/11111100/00000000/00000000
+    this will be used to find the subnet 
+    more specificly the transistion byte
+
+    
+    we will do 2 calculation for finding all we need 
+    1- the value of the byte -> 11111100 = 88
+      then compare this 88 with the original number with and op bin of 89
+      transition_byte = 1111 1100 = 252
+      original_ip     = 0101 1001 = 89
+      - Compare IP bytes with subnet mask using AND:  
+
+      AND_OP_RES    = 0101 1000 = 88
+      the transistion byte of the local ip is 88
+
+      
+    - 1st byte: 59 → stays 59  
+    - 2nd byte: 212 AND 252 (`11111100`) = 88
+     ↓  
+  - **Result:** second section is 88  
+  - **Full network IP:** 59.88.0.0
+
+- **Step 2: First Host**  
+  - No calculation needed  
+  - First host = full network IP + 1 → 59.88.0.1
+
+- **Step 3: Last Host calculation**  
+  - Find size of subnetwork → how many hosts can be connected  
+  - Subnet mask in binary: `11111111/11111100/00000000/00000000`  
+  - Look at the byte where the subnet transition occurs (2nd byte)  
+  - Zeros in this byte determine the max number: `00` → max = 3  
+  - Add to second number: 88 + 3 = 91 ↓  
+  - **Last Host:** 59.91.255.254  
+    - 59: network portion  
+    - 91: partial host section added with optional subnets  
+    - 255: maxed out  
+    - 254: leave last for broadcast  
+  - This subnet can have `(91-88) * 255 * 254` usable IPs for hosts
+
+- **Step 4: Broadcast Address**  
+  - Broadcast = last host + 1 → 59.91.255.255  
+  - Final max option in the subnet
+
+- **Step 5: Next Subnet**  
+  - Next IP available after this subnet = broadcast + 1 → 59.92.0.0
+
+- **Summary of Steps**  
+  1. Check size of subnet and find transition byte  
+  2. Compare transition byte with IP section to calculate network  
+  3. Find last host by maximizing zeros in transition byte  
+  4. Add 1 to get broadcast  
+  5. Add 1 to broadcast to get next subnet
+
+
+i want the code to print 
+""""
+
+Network: 
+First Host: 
+Last Host: 
+Broadcast: 
+Next Subnet: 
+
+(then i want in details the steps) 
+
+the transition byte is /14
+                BASE
+00000000/00000000/00000000/00000000
+                SUBMASK
+11111111/11111100/00000000/00000000
+
+transistion byte     -> 11111100
+
+the value of the byte -> 11111100 = 88
+transition_byte = 1111 1100 = 252
+original_ip     = 0101 1001 = 89
+AND_OP_RES      = 0101 1000 = 88
+    
+1st byte: 59 → stays 59  
+2nd byte: 212 AND 252 (`11111100`) = 88
+    ↓  
+Full network IP: 59.88.0.0
+
+Step 2: First Host
+- First host = full network IP + 1 → 59.88.0.1
+
+Step 3: Last Host calculation**  
+transition_byte = 11111100 
+- Zeros in this byte determine the max number: `00` → max = 3  
+- Add to second number: 88 + 3 = 91 
+          ↓  
+- **Last Host:** 59.91.255.254  
+  - 59: network portion  
+  - 91: partial host section added with optional subnets  
+  - 255: maxed out  
+  - 254: leave last for broadcast  
+- This subnet can have `(91-88) * 255 * 254` usable IPs for hosts
+
+Step 4: Broadcast Address  
+- Broadcast = last host + 1 → 59.91.255.255  
+- Final max option in the subnet
+
+Step 5: Next Subnet  
+- Next IP available after this subnet = broadcast + 1 → 59.92.0.0
+
+""""
+
+
+| Class | First Bit Pattern | Range                       | Default Mask    | Purpose                  |
+|-------|-------------------|-----------------------------|-----------------|--------------------------|
+| A     | 0xxxxxxx          | 0.0.0.0   – 127.255.255.255 | 255.0.0.0       | Very large networks      |
+| B     | 10xxxxxx          | 128.0.0.0 – 191.255.255.255 | 255.255.0.0     | Medium networks          |
+| C     | 110xxxxx          | 192.0.0.0 – 223.255.255.255 | 255.255.255.0   | Small networks           |
+| D     | 1110xxxx          | 224.0.0.0 – 239.255.255.255 | N/A             | Multicast                |
+| E     | 1111xxxx          | 240.0.0.0 – 255.255.255.255 | N/A             | Reserved / Experimental  |
